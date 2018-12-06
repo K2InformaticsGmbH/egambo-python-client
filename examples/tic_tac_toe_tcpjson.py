@@ -1,4 +1,4 @@
-import tcpjson
+from egambo import tcpjson
 import json
 import argparse
 
@@ -25,9 +25,7 @@ class TicTacToeSSL:
         # TODO: error handling and verify game response, e.g. valid move or win or not
 
     def _send_and_receive(self, message):
-        print(message)
-        result = json.loads(self.tj.Send(json.dumps(message)))
-        print(result)
+        result = self.tj.send(message)
         return result
 
 
