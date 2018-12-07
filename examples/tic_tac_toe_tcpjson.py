@@ -1,33 +1,6 @@
-from egambo import tcpjson
+from egambo import client
 import json
 import argparse
-
-
-class TicTacToeSSL:
-
-    def __init__(self, host, port):
-        self.tj = tcpjson.TcpJson(host, port, True)
-        self.game_id = ""
-
-    def login(self, player, password):
-        message = {"action": "login", "user": player, "password": password}
-        result = self._send_and_receive(message)
-        # TODO: error handling, e.g. check if response is OK.
-
-    def new_game(self):
-        message =  {"action": "new_game", "type": "tic_tac_toe", "opponent": 1}
-        result = self._send_and_receive(message)
-        print(result)
-
-    def play(self, position):
-        message = {"action": "play", "game_id": self.game_id, "position": position}
-        result = self._send_and_receive(message)
-        # TODO: error handling and verify game response, e.g. valid move or win or not
-
-    def _send_and_receive(self, message):
-        result = self.tj.send(message)
-        return result
-
 
 if __name__ == '__main__':
 
@@ -43,7 +16,8 @@ if __name__ == '__main__':
     port = args.port
 
     # create and play the game
-    game = TicTacToeSSL(host, port)
-    game.login(args.username, args.password)
-    game.new_game()
-    game.play(2)
+    cl = client.Client(host, port)
+    "ok" == cl.login(args.username, args.password)
+    game = cl.new_game()
+    game_id = game["id"]
+    cl.play(game_id, 2)
